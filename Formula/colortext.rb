@@ -1,17 +1,22 @@
+require "language/node"
+
 class Colortext < Formula
-  desc "Color text"
+  desc "Color Text"
   homepage "https://github.com/eks515/colortext"
-  url "https://github.com/eks5115/colortext/archive/0.0.1.tar.gz"
-  sha256 "026e723be87f55e24bfdbb0a799ca12ce123a90422190577b09539e0c3d85f94"
+  url "https://github.com/eks5115/colortext/archive/0.2.0.tar.gz"
+  sha256 "cfe3889bff1d47e28b554c53ac8466d87ae682a1562d2b707b692e30772e0244"
   head "https://github.com/eks5115/colortext.git"
 
-  option "with-short-names", "link as \"ct\" instead"
+  depends_on "node"
 
   def install
-    bin.install "colortext.sh" => build.with?("short-names") ? "ct" : "colortext"
+    system "npm", "install", *Language::Node.std_npm_install_args(libexec)
+    bin.install_symlink Dir["#{libexec}/bin/*"]
+    config = etc/"colortext"
+    config.install "default.yaml"
   end
 
   test do
-    system "which", build.with?("short-names") ? "ct" : "colortext"
+    system "true"
   end
 end
